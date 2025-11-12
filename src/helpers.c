@@ -37,6 +37,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <dlfcn.h>
+#include <limits.h>
 
 #include "trash.h"
 
@@ -1437,12 +1438,41 @@ void get_config_from_file(config *cfg)
 			"IGNORE_RE",
 			"PRESERVE_FILES_LARGER_THAN");
 
-	/* Did read_config_from_file() fail? If it did, we quit and leave the compile-time defaults unchanged: */
+    if (!config_values) {
+        char sysconf_path[PATH_MAX];
+        snprintf(sysconf_path, sizeof(sysconf_path), "%s/libtrash.conf", SYSCONFDIR);
+        config_values = read_config_from_file(sysconf_path, NUMBER_OF_CONFIG_OPTIONS, cfg,
+            "TRASH_CAN",
+			"IN_CASE_OF_FAILURE",
+			"SHOULD_WARN",
+			"IGNORE_HIDDEN",
+			"IGNORE_EDITOR_BACKUP",
+			"PROTECT_TRASH",
+			"GLOBAL_PROTECTION",
+			"TRASH_SYSTEM_ROOT",
+			"TEMPORARY_DIRS",
+			"USER_TEMPORARY_DIRS",
+			"UNREMOVABLE_DIRS",
+			"IGNORE_EXTENSIONS",
+			"INTERCEPT_UNLINK",
+			"INTERCEPT_RENAME",
+			"INTERCEPT_FOPEN",
+			"INTERCEPT_FREOPEN",
+			"INTERCEPT_OPEN",
+			"LIBTRASH_CONFIG_FILE_UNREMOVABLE",
+			"REMOVABLE_MEDIA_MOUNT_POINTS",
+			"IGNORE_EDITOR_TEMPORARY",
+			"EXCEPTIONS",
+			"IGNORE_RE",
+			"PRESERVE_FILES_LARGER_THAN");
 
-	if (!config_values)
-		return;
+        /* Did read_config_from_file() fail? If it did, we quit and leave the compile-time defaults unchanged: */
 
-	/* If we managed to read the configuration file in the user's home directory,
+        if (!config_values)
+            return;
+    }
+
+    /* If we managed to read the configuration file in the user's home directory,
 	 * we now proceed to set the configuration variables to the values read_config_from_file() returned to us: */
 
 	/* Configuration variables which are integers used as "flags" are set by the

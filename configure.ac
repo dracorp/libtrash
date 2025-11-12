@@ -42,6 +42,7 @@ AC_DEFINE([NO],[0],[Default for NO])
 AC_DEFINE([ALLOW_DESTRUCTION],[1],[Default for ALLOW_DESTRUCTION])
 AC_DEFINE([PROTECT],[0],[Default for PROTECT])
 AC_DEFINE([PERSONAL_CONF_FILE],".libtrash",[Personal Configuration File])
+AC_DEFINE([SYSCONFDIR],"/etc","System Configuration Directory")
 AC_DEFINE([WARNING_STRING],"Remember that libtrash is disabled.",[Disabled Warning String])
 AC_DEFINE([INTERCEPT_UNLINK],[YES],[Trap unlink])
 AC_DEFINE([INTERCEPT_RENAME],[YES],[Trap rename])
@@ -150,7 +151,7 @@ for TMPVAR in creat creat64 fopen fopen64 freopen freopen64 open open64 rename u
 do
 	VERSIONVAR=$(grep -m1 $TMPVAR@ glibc_symbols | cut -d@ -f2)
 	FUNCVAR=$(echo $TMPVAR | tr a-z A-Z)_VERSION
-	
+
 	if test "x$VERSIONVAR" != "x" ; then
 		AC_DEFINE_UNQUOTED([$FUNCVAR],"$VERSIONVAR",[$TMPVAR Define for dlvsym call])
 	else
@@ -163,7 +164,7 @@ for TMPVAR in openat openat64 renameat unlinkat
 do
 	VERSIONVAR=$(grep -m1 $TMPVAR@ glibc_symbols | cut -d@ -f2)
 	FUNCVAR=$(echo $TMPVAR | tr a-z A-Z)_VERSION
-	
+
 	if test "x$VERSIONVAR" != "x" ; then
 		AC_DEFINE_UNQUOTED([$FUNCVAR],"$VERSIONVAR",[$TMPVAR Define for dlvsym call])
 	else
