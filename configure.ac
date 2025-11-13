@@ -42,7 +42,6 @@ AC_DEFINE([NO],[0],[Default for NO])
 AC_DEFINE([ALLOW_DESTRUCTION],[1],[Default for ALLOW_DESTRUCTION])
 AC_DEFINE([PROTECT],[0],[Default for PROTECT])
 AC_DEFINE([PERSONAL_CONF_FILE],".libtrash",[Personal Configuration File])
-AC_DEFINE([SYSCONFDIR],"/etc","System Configuration Directory")
 AC_DEFINE([WARNING_STRING],"Remember that libtrash is disabled.",[Disabled Warning String])
 AC_DEFINE([INTERCEPT_UNLINK],[YES],[Trap unlink])
 AC_DEFINE([INTERCEPT_RENAME],[YES],[Trap rename])
@@ -77,6 +76,14 @@ if test x"$debug" = xyes; then
 	AC_DEFINE([DEBUG], [1], [Debug Flag])
 fi
 
+if test "x$sysconfdir" = 'x${prefix}/etc'; then
+    if test "x$prefix" = 'xNONE'; then
+        sysconfdir=$ac_default_prefix/etc
+    else
+        sysconfdir=$prefix/etc
+    fi
+fi
+AC_DEFINE_UNQUOTED([SYSCONFDIR], ["$sysconfdir"], [System Configuration Directory])
 
 # Checks for programs.
 AC_PROG_CC
